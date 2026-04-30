@@ -162,3 +162,122 @@ El backend Express está en `localhost:3000`. Endpoints esperados:
 - `POST /api/auth/login`
 
 El frontend Astro debe hacer fetch a estos endpoints desde los componentes Preact.
+
+## Implementación Ideal del Backend (Roadmap)
+
+Para escalar este proyecto de forma segura y mantenible, la implementación recomendada del backend es:
+
+### Arquitectura por capas
+
+- `routes`: define endpoints y middlewares HTTP
+- `controllers`: recibe request/response y delega
+- `services`: lógica de negocio
+- `repositories`: acceso a DB
+- `models`: esquemas Mongoose
+
+Estructura sugerida:
+
+```text
+backend/
+  src/
+    app.js
+    server.js
+    config/
+      env.js
+      db.js
+      cors.js
+      logger.js
+    common/
+      errors/
+        AppError.js
+        errorHandler.js
+      middlewares/
+        authMiddleware.js
+        validate.js
+        rateLimiter.js
+      utils/
+        asyncHandler.js
+        jwt.js
+        response.js
+    modules/
+      auth/
+        auth.routes.js
+        auth.controller.js
+        auth.service.js
+        auth.repository.js
+        auth.validation.js
+      users/
+        user.model.js
+        user.routes.js
+        user.controller.js
+        user.service.js
+        user.repository.js
+      comments/
+        comment.model.js
+        comment.routes.js
+        comment.controller.js
+        comment.service.js
+        comment.repository.js
+        comment.validation.js
+      health/
+        health.routes.js
+  tests/
+    auth.integration.test.js
+    comments.integration.test.js
+```
+
+### Endpoints recomendados (v1)
+
+- Auth:
+  - `POST /api/v1/auth/register`
+  - `POST /api/v1/auth/login`
+  - `POST /api/v1/auth/refresh`
+  - `POST /api/v1/auth/logout`
+  - `GET /api/v1/auth/me`
+- Comments:
+  - `GET /api/v1/comments?cursor=&limit=`
+  - `POST /api/v1/comments`
+  - `PATCH /api/v1/comments/:id` (admin opcional)
+  - `DELETE /api/v1/comments/:id` (admin opcional)
+- Health:
+  - `GET /api/v1/health`
+
+### Seguridad y autenticación
+
+- JWT con `access token` corto (15-30 min)
+- `refresh token` rotativo en cookie `HttpOnly`
+- `bcrypt` para hash de contraseñas
+- `helmet`, `cors` por entorno, `rate limit`
+- Validación con Zod/Joi + sanitización
+
+### Variables de entorno mínimas
+
+```env
+NODE_ENV=development
+PORT=3000
+MONGODB_URI=<uri>
+JWT_ACCESS_SECRET=<secret>
+JWT_REFRESH_SECRET=<secret>
+JWT_ACCESS_EXPIRES=15m
+JWT_REFRESH_EXPIRES=7d
+FRONTEND_ORIGIN=http://localhost:4321
+LOG_LEVEL=info
+```
+
+### Modelo recomendado de comentarios
+
+- `userId` (nullable para invitado)
+- `authorName`
+- `rating` (1..5)
+- `content`
+- `status` (`active|hidden`)
+- `createdAt`, `updatedAt`
+
+### Plan de migración incremental
+
+1. Reorganizar auth por capas sin romper contratos actuales
+2. Agregar middleware global de errores y validación
+3. Implementar módulo `comments` persistente en MongoDB
+4. Migrar frontend de comentarios a API backend
+5. Añadir refresh/logout seguros
+6. Incorporar tests de integración + CI
