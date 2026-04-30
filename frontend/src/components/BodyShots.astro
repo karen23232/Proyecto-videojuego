@@ -1,0 +1,133 @@
+---
+import { Image } from 'astro:assets';
+import ethanBodySrc from '../assets/images/body-ethan.jpg';
+import ariaBodySrc from '../assets/images/body-aria.jpg';
+---
+
+<section class="body-shots" aria-label="Body shots de personajes">
+  <div class="body-grid">
+    <article class="body-item body-item-left">
+      <Image src={ethanBodySrc} alt="Ethan Cole" loading="lazy" />
+      <div class="body-overlay body-overlay-left"></div>
+      <div class="body-copy body-copy-left">
+        <div class="body-kicker">Personaje 01</div>
+        <div class="body-name">ETHAN COLE</div>
+        <div class="body-sub">El que busca la verdad</div>
+      </div>
+    </article>
+
+    <article class="body-item body-item-right">
+      <Image src={ariaBodySrc} alt="Aria Voss" loading="lazy" />
+      <div class="body-overlay body-overlay-right"></div>
+      <div class="body-copy body-copy-right">
+        <div class="body-kicker">Personaje 02</div>
+        <div class="body-name">ARIA VOSS</div>
+        <div class="body-sub">La que sobrevive a todo</div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  .body-shots {
+    background: var(--black);
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .body-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 620px;
+  }
+
+  .body-item {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .body-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 25% top;
+    filter: brightness(0.8) contrast(1.1);
+    transition: transform 0.8s ease;
+  }
+
+  .body-item:hover img {
+    transform: scale(1.04);
+  }
+
+  .body-overlay {
+    position: absolute;
+    inset: 0;
+  }
+
+  .body-overlay-left {
+    background: linear-gradient(135deg, rgba(46, 16, 101, 0.5) 0%, transparent 60%),
+      linear-gradient(0deg, rgba(7, 7, 7, 0.85) 0%, transparent 45%);
+  }
+
+  .body-overlay-right {
+    background: linear-gradient(225deg, rgba(102, 18, 20, 0.5) 0%, transparent 60%),
+      linear-gradient(0deg, rgba(7, 7, 7, 0.85) 0%, transparent 45%);
+  }
+
+  .body-copy {
+    position: absolute;
+    bottom: 40px;
+  }
+
+  .body-copy-left {
+    left: 40px;
+  }
+
+  .body-copy-right {
+    right: 40px;
+    text-align: right;
+  }
+
+  .body-kicker {
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 5px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .body-name {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--beige);
+    font-weight: 700;
+  }
+
+  .body-sub {
+    font-size: 14px;
+    color: var(--beige-dim);
+    margin-top: 4px;
+    font-weight: 300;
+  }
+
+  @media (max-width: 768px) {
+    .body-grid {
+      grid-template-columns: 1fr;
+      height: auto;
+    }
+
+    .body-item {
+      height: 460px;
+    }
+
+    .body-copy,
+    .body-copy-left,
+    .body-copy-right {
+      left: 24px;
+      right: 24px;
+      text-align: left;
+      bottom: 28px;
+    }
+  }
+</style>

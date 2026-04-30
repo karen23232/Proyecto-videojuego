@@ -1,0 +1,338 @@
+<section class="comments-section" id="comunidad">
+  <div class="container">
+    <div class="comments-header">
+      <div>
+        <p class="section-label">Comunidad</p>
+        <h2 class="section-title">Lo que dicen los <span style="color:var(--yellow)">Jugadores</span></h2>
+      </div>
+      <div class="badge badge-green"><span class="badge-dot"></span> 4.8 / 5 promedio</div>
+    </div>
+    <div class="comments-grid">
+      <div class="comment-card">
+        <div class="comment-stars">★★★★★</div>
+        <p class="comment-text">Nunca había sentido tanta tensión en un videojuego. Los últimos 30 minutos me dejaron sin palabras. Aria es mi personaje favorito de todos los tiempos.</p>
+        <div class="comment-author">
+          <div class="comment-avatar">DV</div>
+          <div class="comment-author-info">
+            <div class="name">DarkVoid_99</div>
+            <div class="date">Hace 2 días</div>
+          </div>
+        </div>
+      </div>
+      <div class="comment-card">
+        <div class="comment-stars">★★★★★</div>
+        <p class="comment-text">La narrativa es absolutamente brillante. Cada decisión que tomé me hizo repensar todo. Jugué 3 veces para ver todos los finales. Vale completamente la pena.</p>
+        <div class="comment-author">
+          <div class="comment-avatar">MH</div>
+          <div class="comment-author-info">
+            <div class="name">MindHunter_X</div>
+            <div class="date">Hace 5 días</div>
+          </div>
+        </div>
+      </div>
+      <div class="comment-card">
+        <div class="comment-stars">★★★★☆</div>
+        <p class="comment-text">Los gráficos y la atmósfera son increíbles. Ethan es un personaje muy bien construido. Espero con ansias el próximo capítulo.</p>
+        <div class="comment-author">
+          <div class="comment-avatar">SM</div>
+          <div class="comment-author-info">
+            <div class="name">ShadowMind</div>
+            <div class="date">Hace 1 semana</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form class="comment-form">
+      <div class="form-title">💬 DEJAR UN COMENTARIO</div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="commentName">Tu Nombre / Usuario</label>
+          <input id="commentName" type="text" placeholder="MindHunter_X" />
+        </div>
+
+        <div class="form-group">
+          <span class="form-label">Tu Calificacion</span>
+          <div class="star-rating" aria-label="calificacion">
+            <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label for="commentText">Tu Comentario</label>
+        <textarea id="commentText" placeholder="Cuentanos tu experiencia con Recessed Minds..."></textarea>
+      </div>
+
+      <button type="button" class="btn btn-red">PUBLICAR COMENTARIO</button>
+    </form>
+  </div>
+</section>
+
+<style>
+  .comments-section {
+    background: linear-gradient(180deg, var(--black) 0%, rgba(46,16,101,0.1) 50%, var(--black) 100%);
+  }
+
+  .comments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 48px;
+  }
+
+  .comments-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .comment-card {
+    background: rgba(46,16,101,0.15);
+    border: 1px solid rgba(220,214,196,0.08);
+    padding: 28px;
+    position: relative;
+    transition: all 0.3s;
+  }
+
+  .comment-card:hover {
+    border-color: rgba(102,18,20,0.4);
+    background: rgba(46,16,101,0.25);
+    transform: translateY(-4px);
+  }
+
+  .comment-card::before {
+    content: '"';
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 60px;
+    color: rgba(102,18,20,0.3);
+    line-height: 1;
+  }
+
+  .comment-stars {
+    color: var(--yellow);
+    font-size: 14px;
+    margin-bottom: 12px;
+    letter-spacing: 2px;
+  }
+
+  .comment-text {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--beige-dim);
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+
+  .comment-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--violet), var(--red));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--beige);
+    flex-shrink: 0;
+  }
+
+  .comment-author-info .name {
+    font-family: var(--font-display);
+    font-size: 13px;
+    color: var(--beige);
+    font-weight: 600;
+  }
+
+  .comment-author-info .date {
+    font-size: 11px;
+    color: var(--beige-dim);
+    opacity: 0.6;
+  }
+
+  .comment-form {
+    background: rgba(7,7,7,0.6);
+    border: 1px solid rgba(220,214,196,0.1);
+    padding: 40px;
+    position: relative;
+  }
+
+  .comment-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--red), var(--violet), var(--blue));
+  }
+
+  .form-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--beige);
+    margin-bottom: 28px;
+    letter-spacing: 2px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-group label,
+  .form-group .form-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--beige-dim);
+    font-family: var(--font-display);
+  }
+
+  .form-group input,
+  .form-group textarea {
+    background: rgba(46,16,101,0.2);
+    border: 1px solid rgba(220,214,196,0.12);
+    color: var(--beige);
+    padding: 14px 18px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s;
+    resize: none;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: var(--red);
+    background: rgba(102,18,20,0.1);
+    box-shadow: 0 0 20px rgba(102,18,20,0.2);
+  }
+
+  .form-group textarea {
+    height: 120px;
+  }
+
+  @media (max-width: 768px) {
+    .comments-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .comments-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+  }
+</style>
+
+<style is:global>
+  .comments-section .comment-form {
+    background: rgba(7,7,7,0.6);
+    border: 1px solid rgba(220,214,196,0.1);
+    padding: 40px;
+    position: relative;
+  }
+
+  .comments-section .comment-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--red), var(--violet), var(--blue));
+  }
+
+  .comments-section .form-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--beige);
+    margin-bottom: 28px;
+    letter-spacing: 2px;
+  }
+
+  .comments-section .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .comments-section .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .comments-section .form-group label,
+  .comments-section .form-group .form-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--beige-dim);
+    font-family: var(--font-display);
+  }
+
+  .comments-section .form-group input,
+  .comments-section .form-group textarea {
+    width: 100%;
+    background: rgba(46,16,101,0.2);
+    border: 1px solid rgba(220,214,196,0.12);
+    color: var(--beige);
+    padding: 14px 18px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s;
+    resize: none;
+  }
+
+  .comments-section .form-group input:focus,
+  .comments-section .form-group textarea:focus {
+    border-color: var(--red);
+    background: rgba(102,18,20,0.1);
+    box-shadow: 0 0 20px rgba(102,18,20,0.2);
+  }
+
+  .comments-section .form-group textarea {
+    height: 120px;
+  }
+
+  .comments-section .star-rating {
+    display: flex;
+    gap: 8px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    .comments-section .form-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,84 @@
+---
+---
+
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-number"><span class="accent" id="cnt1">150</span>K+</span>
+        <span class="stat-label">Jugadores Registrados</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number"><span class="accent" id="cnt2">48</span></span>
+        <span class="stat-label">Horas de Historia</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number"><span class="accent" id="cnt3">24</span>+</span>
+        <span class="stat-label">Finales Únicos</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number"><span class="accent" id="cnt4">4.8</span><span style="color:var(--yellow);font-size:28px">★</span></span>
+        <span class="stat-label">Calificación Media</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .stats-bar {
+    background: linear-gradient(135deg, var(--violet), #1a0840);
+    border-top: 1px solid rgba(220,214,196,0.05);
+    border-bottom: 1px solid rgba(220,214,196,0.05);
+    padding: 48px 0;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 24px;
+    position: relative;
+  }
+
+  .stat-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 60%;
+    width: 1px;
+    background: rgba(220,214,196,0.1);
+  }
+
+  .stat-number {
+    font-family: var(--font-tech);
+    font-size: 40px;
+    font-weight: 900;
+    color: var(--beige);
+    display: block;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-number .accent {
+    color: var(--yellow);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--beige-dim);
+    font-family: var(--font-display);
+  }
+
+  @media (max-width: 768px) {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

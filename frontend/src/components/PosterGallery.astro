@@ -1,0 +1,97 @@
+---
+import { Image } from 'astro:assets';
+import poster1Src from '../assets/images/poster-ethan.jpg';
+import poster2Src from '../assets/images/poster-aria.jpg';
+---
+
+<section style="background:var(--black);position:relative;">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+      <div><p class="section-label">Arte Oficial</p><h2 class="section-title">Carteles <span style="color:var(--red)">Oficiales</span></h2></div>
+      <span class="badge badge-green"><span class="badge-dot"></span> Edición Limitada</span>
+    </div>
+  </div>
+  <div class="posters-grid">
+    <div class="poster-item">
+      <Image src={poster1Src} alt="Ethan Cole" loading="lazy" />
+      <div class="poster-overlay">
+        <div class="poster-char-name">Ethan Cole</div>
+        <div class="poster-char-quote">"El miedo no es real. La duda, sí."</div>
+      </div>
+    </div>
+    <div class="poster-item">
+      <Image src={poster2Src} alt="Aria Voss" loading="lazy" />
+      <div class="poster-overlay">
+        <div class="poster-char-name">Aria Voss</div>
+        <div class="poster-char-quote">"Sobreviví porque aprendí a no confiar en nadie."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .posters-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin-top: 64px;
+  }
+
+  .poster-item {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .poster-item img {
+    width: 100%;
+    height: 700px;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    display: block;
+  }
+
+  .poster-item:hover img {
+    transform: scale(1.05);
+  }
+
+  .poster-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(7,7,7,0.9) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 40px;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+
+  .poster-item:hover .poster-overlay {
+    opacity: 1;
+  }
+
+  .poster-char-name {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--beige);
+    font-weight: 700;
+  }
+
+  .poster-char-quote {
+    font-size: 14px;
+    color: var(--beige-dim);
+    font-style: italic;
+    margin-top: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .posters-grid {
+      grid-template-columns: 1fr;
+    }
+    .poster-item img {
+      height: 400px;
+    }
+  }
+</style>

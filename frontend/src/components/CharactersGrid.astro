@@ -1,0 +1,47 @@
+---
+import CharacterCard from './CharacterCard.astro';
+import ethanSrc from '../assets/images/ethan.jpg';
+import ariaSrc from '../assets/images/aria.jpg';
+---
+
+<section id="personajes" class="characters-section">
+  <div class="container">
+    <p class="section-label">Protagonistas</p>
+    <h2 class="section-title">Conoce a los <span style="color:var(--yellow)">Supervivientes</span></h2>
+    <div class="chars-grid">
+      <CharacterCard
+        name="Ethan Cole"
+        role="El Escéptico"
+        imageSrc={ethanSrc}
+        description="Un estudiante brillante con memoria fragmentada. Busca respuestas, pero cada pista lo acerca a una verdad que preferiría olvidar."
+        stats={[{ label: 'Lógica', value: 92 }, { label: 'Resistencia', value: 76 }, { label: 'Empatía', value: 48 }]}
+      />
+      <CharacterCard
+        name="Aria Voss"
+        role="La Sobreviviente"
+        imageSrc={ariaSrc}
+        description="Silenciosa, calculadora y peligrosa. Conoce secretos del instituto que podrían salvarte... o condenarte."
+        stats={[{ label: 'Sigilo', value: 88 }, { label: 'Intuición', value: 90 }, { label: 'Confianza', value: 35 }]}
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .characters-section {
+    background: linear-gradient(180deg, var(--black) 0%, rgba(24, 51, 72, 0.16) 100%);
+  }
+
+  .chars-grid {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+
+  @media (max-width: 768px) {
+    .chars-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

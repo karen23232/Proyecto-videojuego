@@ -1,0 +1,132 @@
+---
+import { Image } from 'astro:assets';
+import logoSrc from '../assets/images/Logo.png';
+---
+
+<nav>
+  <div class="nav-logo">
+    <Image src={logoSrc} alt="Recessed Minds" loading="eager" fetchpriority="high" />
+  </div>
+  <ul class="nav-links">
+    <li><a href="#inicio">Inicio</a></li>
+    <li><a href="#personajes">Personajes</a></li>
+    <li><a href="#historia">Historia</a></li>
+    <li><a href="#comunidad">Comunidad</a></li>
+    <li><a href="#personajes" class="play-link">▶ Jugar</a></li>
+  </ul>
+  <div class="nav-actions">
+    <slot name="actions" />
+  </div>
+</nav>
+
+<style>
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: linear-gradient(180deg, rgba(7, 7, 7, 0.95) 0%, transparent 100%);
+    backdrop-filter: blur(2px);
+    border-bottom: 1px solid rgba(220, 214, 196, 0.05);
+  }
+
+  .nav-logo :global(img) {
+    height: 44px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 12px rgba(220, 214, 196, 0.4));
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+    align-items: center;
+  }
+
+  .nav-links a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    color: var(--beige);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding-bottom: 10px;
+    transition: color 0.3s, text-shadow 0.3s;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(102, 18, 20, 0.2) 0%, var(--red) 50%, rgba(102, 18, 20, 0.2) 100%);
+    transform: translateX(-50%) scaleX(0);
+    transform-origin: center;
+    transition: transform 0.28s ease;
+    pointer-events: none;
+  }
+
+  .nav-links a:hover {
+    color: #ffffff;
+    text-shadow: 0 0 20px rgba(220, 214, 196, 0.6);
+  }
+
+  .nav-links a:hover::after,
+  .nav-links a:focus-visible::after {
+    transform: translateX(-50%) scaleX(1);
+  }
+
+  .nav-links a:focus-visible {
+    color: #ffffff;
+  }
+
+  .nav-links .play-link {
+    background: var(--red);
+    color: #ffffff;
+    font-size: 14px;
+    padding: 12px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    letter-spacing: 2px;
+    box-shadow: 0 8px 20px rgba(102, 18, 20, 0.35);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  }
+
+  .nav-links .play-link::after {
+    display: none;
+  }
+
+  .nav-links .play-link:hover,
+  .nav-links .play-link:focus-visible {
+    background: #7a1b1d;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(102, 18, 20, 0.45);
+  }
+
+  .nav-actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  @media (max-width: 768px) {
+    nav {
+      padding: 14px 20px;
+    }
+
+    .nav-links {
+      display: none;
+    }
+  }
+</style>

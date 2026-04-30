@@ -1,0 +1,159 @@
+---
+---
+
+<section class="story-section" id="historia">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-text">
+        <p class="section-label">La Historia</p>
+        <h2 class="section-title">Un Instituto.<br>Una <span style="color:var(--red)">Pesadilla.</span><br>Sin Salida.</h2>
+        <p><strong>Recessed Minds</strong> es un thriller psicológico de supervivencia ambientado en los pasillos eternos de un instituto olvidado por el tiempo. Despiertas sin saber cómo llegaste. Sin saber quién eres. Sin saber si puedes confiar en lo que ves.</p>
+        <p>Cada habitación esconde un fragmento del pasado. Cada decisión que tomes alterará el mundo a tu alrededor. Las paredes tienen memoria, y <strong>recuerdan todo lo que tú has olvidado</strong>.</p>
+        <p>¿Podrás descifrar la verdad antes de que tu mente ceda ante la oscuridad?</p>
+        <div style="margin-top:32px;"><a href="#historia" class="btn-play">LEER MÁS →</a></div>
+      </div>
+      <div class="story-features">
+        <div class="feature-item">
+          <div class="feature-icon">🧠</div>
+          <div class="feature-title">Decisiones Morales</div>
+          <p class="feature-desc">Cada elección tiene consecuencias permanentes. No hay opciones correctas.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🔮</div>
+          <div class="feature-title">Realidad Fracturada</div>
+          <p class="feature-desc">Los ambientes cambian según tu estado mental. Nada es lo que parece.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🎭</div>
+          <div class="feature-title">Múltiples Finales</div>
+          <p class="feature-desc">Más de 24 finales únicos determinados por tus acciones a lo largo del juego.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-title">Tensión Constante</div>
+          <p class="feature-desc">Sistema de estrés dinámico que afecta la jugabilidad y las percepciones.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🗺️</div>
+          <div class="feature-title">Mundo Abierto</div>
+          <p class="feature-desc">Explora libremente el instituto y descubre secretos en cada rincón oscuro.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🌐</div>
+          <div class="feature-title">Co-op Online</div>
+          <p class="feature-desc">Juega con un amigo. Sus decisiones también afectarán tu realidad.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .story-section {
+    background: linear-gradient(135deg, rgba(24,51,72,0.2) 0%, var(--black) 50%, rgba(46,16,101,0.15) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .story-section::after {
+    content: 'RECESSED';
+    position: absolute;
+    bottom: -60px;
+    left: -20px;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 200px;
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(220,214,196,0.04);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .story-text p {
+    font-size: 17px;
+    line-height: 2;
+    color: var(--beige-dim);
+    font-weight: 300;
+    margin-bottom: 20px;
+  }
+
+  .story-text p strong {
+    color: var(--beige);
+    font-weight: 600;
+  }
+
+  .story-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .feature-item {
+    padding: 24px;
+    border: 1px solid rgba(220,214,196,0.08);
+    background: rgba(7,7,7,0.5);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .feature-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--red);
+    transform: scaleY(0);
+    transition: transform 0.3s;
+    transform-origin: bottom;
+  }
+
+  .feature-item:hover::before {
+    transform: scaleY(1);
+  }
+
+  .feature-item:hover {
+    border-color: rgba(102,18,20,0.4);
+    background: rgba(46,16,101,0.2);
+  }
+
+  .feature-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .feature-title {
+    font-family: var(--font-display);
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--beige);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .feature-desc {
+    font-size: 13px;
+    color: var(--beige-dim);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  @media (max-width: 768px) {
+    .story-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .story-features {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
