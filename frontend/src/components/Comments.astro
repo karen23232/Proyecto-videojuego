@@ -1,71 +1,10 @@
+---
+import CommentsWidget from './CommentsWidget.jsx';
+---
+
 <section class="comments-section" id="comunidad">
   <div class="container">
-    <div class="comments-header">
-      <div>
-        <p class="section-label">Comunidad</p>
-        <h2 class="section-title">Lo que dicen los <span style="color:var(--yellow)">Jugadores</span></h2>
-      </div>
-      <div class="badge badge-green"><span class="badge-dot"></span> 4.8 / 5 promedio</div>
-    </div>
-    <div class="comments-grid">
-      <div class="comment-card">
-        <div class="comment-stars">★★★★★</div>
-        <p class="comment-text">Nunca había sentido tanta tensión en un videojuego. Los últimos 30 minutos me dejaron sin palabras. Aria es mi personaje favorito de todos los tiempos.</p>
-        <div class="comment-author">
-          <div class="comment-avatar">DV</div>
-          <div class="comment-author-info">
-            <div class="name">DarkVoid_99</div>
-            <div class="date">Hace 2 días</div>
-          </div>
-        </div>
-      </div>
-      <div class="comment-card">
-        <div class="comment-stars">★★★★★</div>
-        <p class="comment-text">La narrativa es absolutamente brillante. Cada decisión que tomé me hizo repensar todo. Jugué 3 veces para ver todos los finales. Vale completamente la pena.</p>
-        <div class="comment-author">
-          <div class="comment-avatar">MH</div>
-          <div class="comment-author-info">
-            <div class="name">MindHunter_X</div>
-            <div class="date">Hace 5 días</div>
-          </div>
-        </div>
-      </div>
-      <div class="comment-card">
-        <div class="comment-stars">★★★★☆</div>
-        <p class="comment-text">Los gráficos y la atmósfera son increíbles. Ethan es un personaje muy bien construido. Espero con ansias el próximo capítulo.</p>
-        <div class="comment-author">
-          <div class="comment-avatar">SM</div>
-          <div class="comment-author-info">
-            <div class="name">ShadowMind</div>
-            <div class="date">Hace 1 semana</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <form class="comment-form">
-      <div class="form-title">💬 DEJAR UN COMENTARIO</div>
-
-      <div class="form-grid">
-        <div class="form-group">
-          <label for="commentName">Tu Nombre / Usuario</label>
-          <input id="commentName" type="text" placeholder="MindHunter_X" />
-        </div>
-
-        <div class="form-group">
-          <span class="form-label">Tu Calificacion</span>
-          <div class="star-rating" aria-label="calificacion">
-            <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-group" style="margin-bottom: 20px;">
-        <label for="commentText">Tu Comentario</label>
-        <textarea id="commentText" placeholder="Cuentanos tu experiencia con Recessed Minds..."></textarea>
-      </div>
-
-      <button type="button" class="btn btn-red">PUBLICAR COMENTARIO</button>
-    </form>
+    <CommentsWidget client:visible />
   </div>
 </section>
 
@@ -94,6 +33,25 @@
     padding: 28px;
     position: relative;
     transition: all 0.3s;
+  }
+
+  .comment-actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+  }
+
+  .comment-edit-input {
+    width: 100%;
+    background: rgba(46,16,101,0.2);
+    border: 1px solid rgba(220,214,196,0.12);
+    color: var(--beige);
+    padding: 12px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    min-height: 96px;
+    resize: vertical;
+    margin-bottom: 16px;
   }
 
   .comment-card:hover {
@@ -326,8 +284,26 @@
   .comments-section .star-rating {
     display: flex;
     gap: 8px;
+  }
+
+  .comments-section .star-btn {
+    background: transparent;
+    border: none;
+    color: rgba(220,214,196,0.4);
     font-size: 24px;
     cursor: pointer;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .comments-section .star-btn.active {
+    color: var(--yellow);
+  }
+
+  .comments-section .comments-load-more {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 28px;
   }
 
   @media (max-width: 768px) {

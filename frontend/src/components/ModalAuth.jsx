@@ -37,7 +37,7 @@ export default function ModalAuth({ isOpen, onClose, onLogin, initialTab = 'logi
 
     try {
       const data = await login(loginData.email, loginData.password);
-      saveSession(data.token, data.user);
+      saveSession(data.accessToken || data.token, data.user);
       onLogin && onLogin(data.user);
       onClose();
     } catch (err) {
@@ -59,7 +59,7 @@ export default function ModalAuth({ isOpen, onClose, onLogin, initialTab = 'logi
         registerData.password,
         registerData.confirmPassword
       );
-      saveSession(data.token, data.user);
+      saveSession(data.accessToken || data.token, data.user);
       onLogin && onLogin(data.user);
       onClose();
     } catch (err) {

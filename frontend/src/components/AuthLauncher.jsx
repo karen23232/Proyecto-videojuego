@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'preact/hooks';
 import ModalAuth from './ModalAuth';
 import { ToastContainer, showToast } from './Toast';
-import { loadSession, logout } from '../lib/api';
+import { loadSession, logout, logoutRequest } from '../lib/api';
 
 export default function AuthLauncher({ showTrigger = true }) {
   const [open, setOpen] = useState(false);
@@ -30,7 +30,12 @@ export default function AuthLauncher({ showTrigger = true }) {
     showToast(`Bienvenido, ${nextUser.username || 'jugador'}!`, 'success');
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await logoutRequest();
+    } catch (error) {
+      // no-op
+    }
     logout();
     setUser(null);
     showToast('Sesion cerrada', 'info');
