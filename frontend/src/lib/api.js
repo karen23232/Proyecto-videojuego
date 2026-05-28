@@ -1,5 +1,5 @@
 function getApiBaseUrl() {
-  return import.meta.env.PUBLIC_API_BASE_URL || 'http://localhost:3000/api/v1';
+  return import.meta.env.PUBLIC_API_BASE_URL || '/api/v1';
 }
 
 function getAuthApiUrl() {
@@ -117,13 +117,10 @@ export async function listComments({ cursor, limit = 10 } = {}) {
 }
 
 export async function createComment(payload) {
-  const res = await fetch(`${getCommentsApiUrl()}`, {
+  return fetchWithAuth(`${getCommentsApiUrl()}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
     body: JSON.stringify(payload),
   });
-  return parseApiResponse(res, 'No se pudo publicar el comentario');
 }
 
 export async function updateComment(commentId, payload) {

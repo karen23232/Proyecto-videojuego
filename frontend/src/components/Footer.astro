@@ -10,10 +10,10 @@ import logoSrc from '../assets/images/Logo.png';
         <Image src={logoSrc} alt="Recessed Minds" loading="lazy" />
         <p>Un thriller psicológico de supervivencia que desafiará tu mente y pondrá a prueba tu capacidad de distinguir la realidad de la ilusión.</p>
         <div class="social-links">
-          <a class="social-btn" href="https://x.com" target="_blank" rel="noreferrer">𝕏</a>
-          <a class="social-btn" href="https://www.linkedin.com" target="_blank" rel="noreferrer">in</a>
-          <a class="social-btn" href="https://www.youtube.com" target="_blank" rel="noreferrer">▶</a>
-          <a class="social-btn" href="https://www.instagram.com" target="_blank" rel="noreferrer">📷</a>
+          <a class="social-btn" href="https://x.com" target="_blank" rel="noreferrer" aria-label="X (Twitter)">𝕏</a>
+          <a class="social-btn" href="https://www.linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn">in</a>
+          <a class="social-btn" href="https://www.youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube">▶</a>
+          <a class="social-btn" href="https://www.instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">📷</a>
         </div>
       </div>
       <div class="footer-col">
@@ -31,7 +31,7 @@ import logoSrc from '../assets/images/Logo.png';
         <ul>
           <li><a href="#inicio" data-auth="login">Iniciar Sesión</a></li>
           <li><a href="#inicio" data-auth="register">Registrarse</a></li>
-          <li><a href="#inicio">Mi Perfil</a></li>
+          <li><a href="/dashboard">Mi Perfil</a></li>
           <li><a href="#comunidad">Logros</a></li>
           <li><a href="#historia">Configuración</a></li>
         </ul>
@@ -42,7 +42,7 @@ import logoSrc from '../assets/images/Logo.png';
           <li><a href="#historia">Centro de Ayuda</a></li>
           <li><a href="#comunidad">Reportar Bug</a></li>
           <li><a href="#inicio">Contacto</a></li>
-          <li><a href="#inicio">Política de Privacidad</a></li>
+          <li><a href="#inicio">Privacidad</a></li>
           <li><a href="#inicio">Términos de Uso</a></li>
         </ul>
       </div>
@@ -58,22 +58,52 @@ import logoSrc from '../assets/images/Logo.png';
   footer {
     background: rgba(7,7,7,0.98);
     border-top: 1px solid rgba(220,214,196,0.06);
-    padding: 64px 0 32px;
+    padding: 48px 0 28px;
   }
+
+  @media (min-width: 768px) { footer { padding: 64px 0 32px; } }
 
   .footer-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 48px;
-    margin-bottom: 48px;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 40px;
+  }
+
+  @media (min-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 48px;
+    }
+  }
+
+  /* Brand spans full width on small mobile */
+  @media (max-width: 479px) {
+    .footer-grid { grid-template-columns: 1fr; }
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 480px) {
+    .footer-brand { grid-column: 1 / 3; }
+  }
+
+  @media (min-width: 768px) {
+    .footer-brand { grid-column: auto; }
   }
 
   .footer-brand :global(img) {
-    height: 40px;
+    height: 36px;
     width: auto;
     object-fit: contain;
     filter: drop-shadow(0 0 10px rgba(220,214,196,0.2));
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+  }
+
+  @media (min-width: 768px) {
+    .footer-brand :global(img) { height: 40px; }
   }
 
   .footer-brand p {
@@ -81,12 +111,12 @@ import logoSrc from '../assets/images/Logo.png';
     line-height: 1.8;
     color: var(--beige-dim);
     font-weight: 300;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   .social-links {
     display: flex;
-    gap: 12px;
+    gap: 10px;
   }
 
   .social-btn {
@@ -97,9 +127,8 @@ import logoSrc from '../assets/images/Logo.png';
     align-items: center;
     justify-content: center;
     color: var(--beige-dim);
-    text-decoration: none;
     font-size: 14px;
-    transition: all 0.3s;
+    transition: border-color 0.3s, color 0.3s, background 0.3s;
   }
 
   .social-btn:hover {
@@ -110,11 +139,11 @@ import logoSrc from '../assets/images/Logo.png';
 
   .footer-col h4 {
     font-family: var(--font-display);
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
     color: var(--beige);
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   .footer-col ul {
@@ -126,38 +155,34 @@ import logoSrc from '../assets/images/Logo.png';
   .footer-col ul a {
     font-size: 13px;
     color: var(--beige-dim);
-    text-decoration: none;
     transition: color 0.2s;
     font-weight: 300;
   }
 
-  .footer-col ul a:hover {
-    color: var(--beige);
-  }
+  .footer-col ul a:hover { color: var(--beige); }
 
   .footer-bottom {
     border-top: 1px solid rgba(220,214,196,0.06);
-    padding-top: 28px;
+    padding-top: 24px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .footer-bottom {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0;
+      text-align: left;
+    }
   }
 
   .footer-bottom p {
     font-size: 12px;
     color: var(--beige-dim);
     opacity: 0.5;
-  }
-
-  @media (max-width: 768px) {
-    .footer-grid {
-      grid-template-columns: 1fr;
-      gap: 32px;
-    }
-    .footer-bottom {
-      flex-direction: column;
-      gap: 16px;
-      text-align: center;
-    }
   }
 </style>

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #c9b8a8;
+    font-family: 'Crimson Text', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .bg-layer {
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 80%, rgba(120,0,0,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 80% 20%, rgba(80,0,0,0.12) 0%, transparent 60%),
+      #0a0a0a;
+  }
+
+  .scanlines {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+  }
+
+  .noise {
+    position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 128px 128px;
+    animation: noiseDrift 0.4s steps(1) infinite;
+  }
+
+  @keyframes noiseDrift {
+    0%,100%{background-position:0 0}
+    25%{background-position:-20px 10px}
+    50%{background-position:10px -15px}
+    75%{background-position:-5px 20px}
+  }
+
+  .wrapper {
+    position: relative; z-index: 10;
+    max-width: 1100px; margin: 0 auto;
+    padding: 2rem 2rem 4rem;
+  }
+
+  /* TOP NAV */
+  .top-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(180,0,0,0.25);
+    padding-bottom: 1.2rem; margin-bottom: 2.5rem;
+  }
+
+  .game-logo {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.1rem; letter-spacing: 0.15em;
+    color: #c00;
+    text-shadow: 0 0 20px rgba(200,0,0,0.4);
+    position: relative;
+  }
+
+  .game-logo::after {
+    content: 'VOID ECHO';
+    position: absolute; top: 0; left: 0;
+    color: rgba(200,0,0,0.3);
+    clip-path: inset(40% 0 40% 0);
+    animation: glitch 4s infinite;
+  }
+
+  @keyframes glitch {
+    0%,90%,100%{transform:none;opacity:0}
+    92%{transform:translateX(-3px);opacity:1}
+    94%{transform:translateX(2px);opacity:0.7}
+    96%{transform:translateX(-1px);opacity:1}
+    98%{transform:none;opacity:0}
+  }
+
+  .nav-user {
+    display: flex; align-items: center; gap: 1rem;
+  }
+
+  .user-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem; color: #666;
+    letter-spacing: 0.08em;
+  }
+
+  .user-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid rgba(180,0,0,0.4);
+    background: radial-gradient(circle at 40% 35%, #3a0000, #0d0000);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.65rem; color: #c00;
+  }
+
+  /* GREETING */
+  .greeting-row {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 2.5rem;
+  }
+
+  .greeting-block h1 {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.9rem; font-weight: 400;
+    color: #e8d5c0;
+    text-shadow: 0 2px 30px rgba(200,0,0,0.2);
+    line-height: 1.2; margin-bottom: 0.4rem;
+  }
+
+  .greeting-block h1 span {
+    color: #c00;
+    text-shadow: 0 0 20px rgba(200,0,0,0.5);
+  }
+
+  .greeting-block p {
+    font-family: 'Crimson Text', serif; font-style: italic;
+    font-size: 1rem; color: #4a4040;
+  }
+
+  .session-info {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem; color: #3a3030;
+    text-align: right; line-height: 1.9;
+    letter-spacing: 0.05em;
+  }
+
+  .session-info .active {
+    color: #600; display: flex; align-items: center; gap: 6px; justify-content: flex-end;
+  }
+
+  .pulse-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #c00;
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 6px rgba(200,0,0,0.8);
+  }
+
+  @keyframes pulse {
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:0.4;transform:scale(0.7)}
+  }
+
+  /* STATS ROW */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    border: 1px solid rgba(180,0,0,0.15);
+    margin-bottom: 2rem;
+    background: rgba(180,0,0,0.08);
+  }
+
+  .stat-card {
+    background: #0d0d0d;
+    padding: 1.2rem 1.4rem;
+    position: relative; overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(180,0,0,0.5), transparent);
+  }
+
+  .stat-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.15em;
+    color: #4a3030; text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-value {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.6rem; color: #c9b8a8;
+    line-height: 1;
+  }
+
+  .stat-value.danger { color: #c00; text-shadow: 0 0 15px rgba(200,0,0,0.4); }
+  .stat-value.warning { color: #8a5a00; }
+
+  .stat-sub {
+    font-size: 0.75rem; color: #3a2a2a;
+    margin-top: 0.3rem; font-style: italic;
+  }
+
+  .stat-bar {
+    height: 2px; background: #1a1010; margin-top: 0.7rem; position: relative;
+  }
+
+  .stat-fill {
+    height: 100%; background: #600;
+    transition: width 1.5s ease;
+    box-shadow: 0 0 8px rgba(180,0,0,0.6);
+  }
+
+  /* MAIN GRID */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  /* MENU CARDS */
+  .menu-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: rgba(180,0,0,0.08);
+    border: 1px solid rgba(180,0,0,0.15);
+  }
+
+  .menu-card {
+    background: #0d0d0d; padding: 1.5rem;
+    cursor: pointer; position: relative; overflow: hidden;
+    transition: background 0.3s;
+  }
+
+  .menu-card:hover { background: #111010; }
+
+  .menu-card::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(180,0,0,0.05) 0%, transparent 50%);
+    opacity: 0; transition: opacity 0.3s;
+  }
+
+  .menu-card:hover::after { opacity: 1; }
+
+  .menu-icon {
+    font-size: 1.4rem; margin-bottom: 0.8rem; display: block;
+    filter: sepia(1) hue-rotate(320deg) saturate(3);
+  }
+
+  .menu-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.8rem; letter-spacing: 0.1em;
+    color: #c9b8a8; margin-bottom: 0.4rem;
+  }
+
+  .menu-desc {
+    font-family: 'Crimson Text', serif; font-style: italic;
+    font-size: 0.85rem; color: #3a3030; line-height: 1.5;
+  }
+
+  .menu-arrow {
+    position: absolute; bottom: 1rem; right: 1rem;
+    color: #500; font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem; opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+
+  .menu-card:hover .menu-arrow { opacity: 1; transform: translateX(3px); }
+
+  /* NEW GAME — featured */
+  .menu-card.featured {
+    grid-column: span 2;
+    border-bottom: 1px solid rgba(180,0,0,0.12);
+  }
+
+  .menu-card.featured .menu-title {
+    font-size: 1rem; color: #c00;
+    text-shadow: 0 0 15px rgba(200,0,0,0.3);
+  }
+
+  /* SIDE PANEL */
+  .side-panel { display: flex; flex-direction: column; gap: 1rem; }
+
+  .lore-panel {
+    background: #0d0d0d;
+    border: 1px solid rgba(180,0,0,0.12);
+    padding: 1.4rem;
+    flex: 1;
+  }
+
+  .lore-header {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.2em; color: #400;
+    text-transform: uppercase; margin-bottom: 0.8rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .lore-header::after {
+    content: ''; flex: 1; height: 1px; background: rgba(180,0,0,0.2);
+  }
+
+  .lore-text {
+    font-family: 'Crimson Text', serif; font-style: italic;
+    font-size: 0.92rem; color: #3a3030;
+    line-height: 1.8;
+  }
+
+  .lore-text .highlight { color: #7a1010; }
+
+  /* RECENT ACTIVITY */
+  .activity-panel {
+    background: #0d0d0d;
+    border: 1px solid rgba(180,0,0,0.12);
+    padding: 1.2rem;
+  }
+
+  .activity-item {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+
+  .activity-item:last-child { border-bottom: none; }
+
+  .act-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: #500; margin-top: 6px; flex-shrink: 0;
+  }
+
+  .act-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.63rem; color: #3a3030; line-height: 1.6;
+  }
+
+  .act-time { color: #2a2020; font-size: 0.58rem; }
+
+  /* SANITY BAR */
+  .sanity-row {
+    border: 1px solid rgba(180,0,0,0.15);
+    background: #0d0d0d;
+    padding: 1rem 1.4rem;
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+
+  .sanity-label {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.65rem; color: #600;
+    letter-spacing: 0.1em; white-space: nowrap;
+  }
+
+  .sanity-track {
+    flex: 1; height: 3px; background: #1a0a0a; position: relative;
+  }
+
+  .sanity-fill {
+    height: 100%; width: 23%;
+    background: linear-gradient(90deg, #800, #c00);
+    box-shadow: 0 0 12px rgba(200,0,0,0.6);
+    animation: sanityFlicker 3s infinite;
+  }
+
+  @keyframes sanityFlicker {
+    0%,100%{opacity:1}
+    50%{opacity:0.6}
+    75%{opacity:0.9}
+  }
+
+  .sanity-val {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem; color: #c00; white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="scanlines"></div>
+<div class="noise"></div>
+
+<div class="wrapper">
+
+  <nav class="top-nav">
+    <div class="game-logo">VOID ECHO</div>
+    <div class="nav-user">
+      <div class="user-badge">
+        SESIÓN #00471<br>
+        <span style="color:#2a2020">SUJETO REGISTRADO</span>
+      </div>
+      <div class="user-avatar">VR</div>
+    </div>
+  </nav>
+
+  <div class="greeting-row">
+    <div class="greeting-block">
+      <h1>Bienvenido de vuelta,<br><span>Visitante</span></h1>
+      <p>Ellos recuerdan que estuviste aquí.</p>
+    </div>
+    <div class="session-info">
+      <div>ÚLTIMA SESIÓN — 03:47 AM</div>
+      <div>DÍAS EN EL ABISMO — 14</div>
+      <div class="active">
+        <div class="pulse-dot"></div> PRESENCIA DETECTADA
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Almas Colectadas</div>
+      <div class="stat-value">247</div>
+      <div class="stat-sub">+12 esta noche</div>
+      <div class="stat-bar"><div class="stat-fill" style="width:62%"></div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Cordura</div>
+      <div class="stat-value danger">23%</div>
+      <div class="stat-sub">Fragmentándose...</div>
+      <div class="stat-bar"><div class="stat-fill" style="width:23%"></div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Nivel de Terror</div>
+      <div class="stat-value warning">VII</div>
+      <div class="stat-sub">Umbral alcanzado</div>
+      <div class="stat-bar"><div class="stat-fill" style="width:78%"></div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Entidades Vistas</div>
+      <div class="stat-value">19</div>
+      <div class="stat-sub">3 sin nombre</div>
+      <div class="stat-bar"><div class="stat-fill" style="width:44%"></div></div>
+    </div>
+  </div>
+
+  <div class="main-grid">
+
+    <!-- Menu -->
+    <div class="menu-grid">
+      <div class="menu-card featured">
+        <span class="menu-icon">🕯</span>
+        <div class="menu-title">Continuar la Pesadilla</div>
+        <div class="menu-desc">Retoma donde la oscuridad te dejó. El pasillo aún te espera.</div>
+        <div class="menu-arrow">→ ENTRAR</div>
+      </div>
+
+      <div class="menu-card">
+        <span class="menu-icon">💀</span>
+        <div class="menu-title">Nueva Condena</div>
+        <div class="menu-desc">Comenzar desde el principio. Todo se olvida. Excepto el miedo.</div>
+        <div class="menu-arrow">→ INICIAR</div>
+      </div>
+
+      <div class="menu-card">
+        <span class="menu-icon">📖</span>
+        <div class="menu-title">Diario Roto</div>
+        <div class="menu-desc">Fragmentos de lo que encontraste. Algunos no deberían leerse.</div>
+        <div class="menu-arrow">→ LEER</div>
+      </div>
+
+      <div class="menu-card">
+        <span class="menu-icon">⚙</span>
+        <div class="menu-title">Configuración</div>
+        <div class="menu-desc">Ajusta el volumen del grito. Calibra la oscuridad.</div>
+        <div class="menu-arrow">→ AJUSTAR</div>
+      </div>
+
+      <div class="menu-card">
+        <span class="menu-icon">🗺</span>
+        <div class="menu-title">El Mapa Corrupto</div>
+        <div class="menu-desc">Zonas exploradas. Zonas que te exploraron a ti.</div>
+        <div class="menu-arrow">→ VER</div>
+      </div>
+    </div>
+
+    <!-- Side -->
+    <div class="side-panel">
+      <div class="lore-panel">
+        <div class="lore-header">Transmisión Interceptada</div>
+        <p class="lore-text">
+          "El <span class="highlight">séptimo umbral</span> se ha abierto. Las entidades del corredor norte han aprendido a imitar voces. No respondas si escuchas tu nombre.<br><br>
+          El espejo del tercer piso <span class="highlight">sigue activo</span>."
+        </p>
+      </div>
+
+      <div class="activity-panel">
+        <div class="lore-header">Eventos Recientes</div>
+        <div class="activity-item">
+          <div class="act-dot"></div>
+          <div class="act-text">Entidad #14 observó tu perfil<br><span class="act-time">HACE 2 MINUTOS</span></div>
+        </div>
+        <div class="activity-item">
+          <div class="act-dot"></div>
+          <div class="act-text">Encontraste el «Fragmento Rojo»<br><span class="act-time">HACE 3 HORAS</span></div>
+        </div>
+        <div class="activity-item">
+          <div class="act-dot"></div>
+          <div class="act-text">La puerta del sótano se abrió sola<br><span class="act-time">03:47 AM</span></div>
+        </div>
+        <div class="activity-item">
+          <div class="act-dot"></div>
+          <div class="act-text">Registro de muerte #7 desbloqueado<br><span class="act-time">AYER</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Sanity -->
+  <div class="sanity-row">
+    <div class="sanity-label">CORDURA RESTANTE</div>
+    <div class="sanity-track">
+      <div class="sanity-fill"></div>
+    </div>
+    <div class="sanity-val">23 / 100</div>
+    <div style="font-family:'Crimson Text',serif;font-style:italic;font-size:0.8rem;color:#3a2020;padding-left:1.5rem;">
+      "Aún puedes distinguir lo real de lo que no lo es... por ahora."
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

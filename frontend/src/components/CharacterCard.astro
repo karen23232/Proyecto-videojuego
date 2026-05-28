@@ -14,17 +14,17 @@ interface Props {
 const { name, role, imageSrc, imageStyle = '', description, stats } = Astro.props;
 ---
 
-<div class="char-card">
+<div class="char-card" role="button" tabindex="0" aria-label={`Ver detalles de ${name}`}>
   <div class="char-card-inner">
     <div class="char-front">
       <Image src={imageSrc} alt={name} style={imageStyle} />
-      <div class="flip-hint">⟳</div>
+      <div class="flip-hint" aria-hidden="true">⟳</div>
       <div class="char-front-info">
         <div class="char-name">{name}</div>
         <div class="char-role">{role}</div>
       </div>
     </div>
-    <div class="char-back">
+    <div class="char-back" aria-hidden="true">
       <div class="char-back-name">{name}</div>
       <div class="char-back-role">{role}</div>
       <p class="char-back-desc">{description}</p>
@@ -45,25 +45,46 @@ const { name, role, imageSrc, imageStyle = '', description, stats } = Astro.prop
   </div>
 </div>
 
+<script>
+  document.querySelectorAll('.char-card').forEach(card => {
+    const toggle = () => card.classList.toggle('tapped');
+    card.addEventListener('click', toggle);
+    card.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+        e.preventDefault();
+        toggle();
+      }
+    });
+  });
+</script>
+
 <style>
   .char-card {
     position: relative;
-    height: 620px;
+    height: clamp(420px, 60vw, 580px);
     cursor: pointer;
     perspective: 1400px;
+    outline: none;
   }
+
+  @media (min-width: 600px) { .char-card { height: 540px; } }
+  @media (min-width: 1024px) { .char-card { height: 620px; } }
 
   .char-card-inner {
     position: relative;
     width: 100%;
     height: 100%;
-    transition: transform 0.85s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: transform 0.85s cubic-bezier(0.4,0.2,0.2,1);
     transform-style: preserve-3d;
   }
 
-  .char-card:hover .char-card-inner {
-    transform: rotateY(180deg);
+  /* Desktop: hover to flip */
+  @media (hover: hover) {
+    .char-card:hover .char-card-inner { transform: rotateY(180deg); }
   }
+
+  /* Touch / click to flip */
+  .char-card.tapped .char-card-inner { transform: rotateY(180deg); }
 
   .char-front, .char-back {
     position: absolute;
@@ -86,8 +107,8 @@ const { name, role, imageSrc, imageStyle = '', description, stats } = Astro.prop
     transition: transform 0.6s ease;
   }
 
-  .char-front:hover :global(img) {
-    transform: scale(1.03);
+  @media (hover: hover) {
+    .char-front:hover :global(img) { transform: scale(1.03); }
   }
 
   .char-front::after {
@@ -102,20 +123,22 @@ const { name, role, imageSrc, imageStyle = '', description, stats } = Astro.prop
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 32px;
+    padding: 24px;
     z-index: 2;
   }
 
+  @media (min-width: 768px) { .char-front-info { padding: 32px; } }
+
   .char-name {
     font-family: var(--font-display);
-    font-size: 28px;
+    font-size: clamp(20px, 4vw, 28px);
     font-weight: 700;
     color: var(--beige);
     margin-bottom: 4px;
   }
 
   .char-role {
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 4px;
     text-transform: uppercase;
     color: var(--red);
@@ -124,17 +147,17 @@ const { name, role, imageSrc, imageStyle = '', description, stats } = Astro.prop
 
   .flip-hint {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 16px;
+    right: 16px;
     z-index: 3;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     border: 1px solid rgba(220,214,196,0.25);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 13px;
     animation: spin 8s linear infinite;
     background: rgba(7,7,7,0.4);
     color: var(--beige-dim);
@@ -146,19 +169,19 @@ const { name, role, imageSrc, imageStyle = '', description, stats } = Astro.prop
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 44px 40px;
+    padding: 28px 24px;
     border: 1px solid rgba(102,18,20,0.5);
     position: relative;
     overflow: hidden;
   }
 
+  @media (min-width: 768px) { .char-back { padding: 44px 40px; } }
+
   .char-back::before {
     content: '';
     position: absolute;
-    top: -80px;
-    right: -80px;
-    width: 250px;
-    height: 250px;
+    top: -80px; right: -80px;
+    width: 250px; height: 250px;
     background: radial-gradient(circle, rgba(102,18,20,0.35) 0%, transparent 70%);
     border-radius: 50%;
   }
@@ -166,17 +189,15 @@ const { name, role, imageSrc, imageStyle = '', description, stats } = Astro.prop
   .char-back::after {
     content: '';
     position: absolute;
-    bottom: -60px;
-    left: -60px;
-    width: 200px;
-    height: 200px;
+    bottom: -60px; left: -60px;
+    width: 200px; height: 200px;
     background: radial-gradient(circle, rgba(24,51,72,0.4) 0%, transparent 70%);
     border-radius: 50%;
   }
 
   .char-back-name {
     font-family: var(--font-display);
-    font-size: 34px;
+    font-size: clamp(22px, 4vw, 34px);
     font-weight: 900;
     color: var(--beige);
     margin-bottom: 6px;
@@ -190,18 +211,22 @@ const { name, role, imageSrc, imageStyle = '', description, stats } = Astro.prop
     text-transform: uppercase;
     color: var(--red);
     font-family: var(--font-display);
-    margin-bottom: 28px;
-    padding-bottom: 28px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
     border-bottom: 1px solid rgba(220,214,196,0.12);
     position: relative;
     z-index: 1;
   }
 
+  @media (min-width: 768px) {
+    .char-back-role { margin-bottom: 28px; padding-bottom: 28px; }
+  }
+
   .char-back-desc {
-    font-size: 15px;
-    line-height: 1.9;
+    font-size: clamp(13px, 2.5vw, 15px);
+    line-height: 1.8;
     color: var(--beige-dim);
-    margin-bottom: 28px;
+    margin-bottom: 20px;
     font-weight: 300;
     position: relative;
     z-index: 1;
@@ -210,49 +235,33 @@ const { name, role, imageSrc, imageStyle = '', description, stats } = Astro.prop
   .char-stats {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
     position: relative;
     z-index: 1;
   }
 
-  .char-stat {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+  .char-stat { display: flex; flex-direction: column; gap: 6px; }
 
   .char-stat-label {
     display: flex;
     justify-content: space-between;
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 2px;
     text-transform: uppercase;
     font-family: var(--font-display);
   }
 
-  .char-stat-label span:first-child {
-    color: var(--beige-dim);
-  }
-
-  .char-stat-label span:last-child {
-    color: var(--yellow);
-  }
+  .char-stat-label span:first-child { color: var(--beige-dim); }
+  .char-stat-label span:last-child { color: var(--yellow); }
 
   .stat-bar {
     height: 3px;
     background: rgba(220,214,196,0.1);
-    position: relative;
   }
 
   .stat-fill {
     height: 100%;
     background: linear-gradient(90deg, var(--red), var(--yellow));
     box-shadow: 0 0 10px rgba(217,211,39,0.4);
-  }
-
-  @media (max-width: 768px) {
-    .char-card {
-      height: 500px;
-    }
   }
 </style>

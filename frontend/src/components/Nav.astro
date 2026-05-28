@@ -3,9 +3,11 @@ import { Image } from 'astro:assets';
 import logoSrc from '../assets/images/Logo.png';
 ---
 
-<nav>
+<nav id="main-nav">
   <div class="nav-logo">
-    <Image src={logoSrc} alt="Recessed Minds" loading="eager" fetchpriority="high" />
+    <a href="#inicio">
+      <Image src={logoSrc} alt="Recessed Minds" loading="eager" fetchpriority="high" />
+    </a>
   </div>
   <ul class="nav-links">
     <li><a href="#inicio">Inicio</a></li>
@@ -17,7 +19,86 @@ import logoSrc from '../assets/images/Logo.png';
   <div class="nav-actions">
     <slot name="actions" />
   </div>
+  <button class="nav-burger" id="nav-burger" aria-label="Abrir menú" aria-expanded="false">
+    <span class="burger-line"></span>
+    <span class="burger-line"></span>
+    <span class="burger-line"></span>
+  </button>
 </nav>
+
+<div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+  <ul class="nav-overlay-links">
+    <li><a href="#inicio">Inicio</a></li>
+    <li><a href="#personajes">Personajes</a></li>
+    <li><a href="#historia">Historia</a></li>
+    <li><a href="#comunidad">Comunidad</a></li>
+  </ul>
+  <div class="nav-overlay-actions" id="nav-overlay-auth">
+    <button class="btn btn-red" data-auth="register">Registrarse</button>
+    <button class="btn btn-outline" data-auth="login">Iniciar Sesión</button>
+  </div>
+  <a href="#personajes" class="nav-overlay-play btn-play">▶ JUGAR AHORA</a>
+</div>
+
+<script>
+  const burger = document.getElementById('nav-burger');
+  const overlay = document.getElementById('nav-overlay');
+
+  function openMenu() {
+    overlay?.classList.add('is-open');
+    burger?.classList.add('is-active');
+    burger?.setAttribute('aria-expanded', 'true');
+    overlay?.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    overlay?.classList.remove('is-open');
+    burger?.classList.remove('is-active');
+    burger?.setAttribute('aria-expanded', 'false');
+    overlay?.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  burger?.addEventListener('click', () => {
+    overlay?.classList.contains('is-open') ? closeMenu() : openMenu();
+  });
+
+  overlay?.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  // Actualizar overlay según sesión activa
+  (function () {
+    try {
+      const token = localStorage.getItem('rm_token');
+      const user = JSON.parse(localStorage.getItem('rm_user') || 'null');
+      if (!token || !user) return;
+
+      const authDiv = document.getElementById('nav-overlay-auth');
+      if (!authDiv) return;
+
+      authDiv.innerHTML = `
+        <a href="/dashboard" class="btn btn-outline" style="display:inline-flex;align-items:center;gap:6px;">
+          <span style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#3d1580,#661214);display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;">${(user.username || 'RM').slice(0, 2).toUpperCase()}</span>
+          ${user.username || 'Mi Perfil'}
+        </a>
+        <button class="btn btn-outline" id="overlay-logout-btn">Cerrar sesión</button>
+      `;
+
+      document.getElementById('overlay-logout-btn')?.addEventListener('click', async () => {
+        try { await fetch('/api/v1/auth/logout', { method: 'POST', credentials: 'include' }); } catch (_) {}
+        localStorage.removeItem('rm_token');
+        localStorage.removeItem('rm_user');
+        window.location.href = '/';
+      });
+    } catch (_) {}
+  })();
+</script>
 
 <style>
   nav {
@@ -29,24 +110,38 @@ import logoSrc from '../assets/images/Logo.png';
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 18px 48px;
-    background: linear-gradient(180deg, rgba(7, 7, 7, 0.95) 0%, transparent 100%);
-    backdrop-filter: blur(2px);
-    border-bottom: 1px solid rgba(220, 214, 196, 0.05);
+    padding: 14px 24px;
+    background: linear-gradient(180deg, rgba(7,7,7,0.97) 0%, rgba(7,7,7,0.8) 100%);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(220,214,196,0.05);
+  }
+
+  @media (min-width: 1024px) {
+    nav { padding: 18px 48px; }
   }
 
   .nav-logo :global(img) {
-    height: 44px;
+    height: 36px;
     width: auto;
     object-fit: contain;
-    filter: drop-shadow(0 0 12px rgba(220, 214, 196, 0.4));
+    filter: drop-shadow(0 0 12px rgba(220,214,196,0.4));
+    display: block;
   }
 
+  @media (min-width: 1024px) {
+    .nav-logo :global(img) { height: 44px; }
+  }
+
+  /* ── Desktop links ── */
   .nav-links {
-    display: flex;
+    display: none;
     gap: 36px;
     list-style: none;
     align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .nav-links { display: flex; }
   }
 
   .nav-links a {
@@ -56,11 +151,11 @@ import logoSrc from '../assets/images/Logo.png';
     color: var(--beige);
     text-decoration: none;
     font-family: var(--font-display);
-    font-size: 13px;
+    font-size: 12px;
     letter-spacing: 3px;
     text-transform: uppercase;
     padding-bottom: 10px;
-    transition: color 0.3s, text-shadow 0.3s;
+    transition: color 0.3s;
   }
 
   .nav-links a::after {
@@ -70,63 +165,135 @@ import logoSrc from '../assets/images/Logo.png';
     bottom: 0;
     width: 100%;
     height: 2px;
-    background: linear-gradient(90deg, rgba(102, 18, 20, 0.2) 0%, var(--red) 50%, rgba(102, 18, 20, 0.2) 100%);
+    background: linear-gradient(90deg, rgba(102,18,20,0.2) 0%, var(--red) 50%, rgba(102,18,20,0.2) 100%);
     transform: translateX(-50%) scaleX(0);
     transform-origin: center;
     transition: transform 0.28s ease;
     pointer-events: none;
   }
 
-  .nav-links a:hover {
-    color: #ffffff;
-    text-shadow: 0 0 20px rgba(220, 214, 196, 0.6);
-  }
-
+  .nav-links a:hover { color: #fff; text-shadow: 0 0 20px rgba(220,214,196,0.5); }
   .nav-links a:hover::after,
-  .nav-links a:focus-visible::after {
-    transform: translateX(-50%) scaleX(1);
-  }
-
-  .nav-links a:focus-visible {
-    color: #ffffff;
-  }
+  .nav-links a:focus-visible::after { transform: translateX(-50%) scaleX(1); }
 
   .nav-links .play-link {
     background: var(--red);
-    color: #ffffff;
-    font-size: 14px;
-    padding: 12px 24px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #fff;
+    font-size: 13px;
+    padding: 10px 20px;
+    border: 1px solid rgba(255,255,255,0.15);
     letter-spacing: 2px;
-    box-shadow: 0 8px 20px rgba(102, 18, 20, 0.35);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+    box-shadow: 0 6px 16px rgba(102,18,20,0.35);
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+    transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
   }
 
-  .nav-links .play-link::after {
-    display: none;
-  }
+  .nav-links .play-link::after { display: none; }
 
-  .nav-links .play-link:hover,
-  .nav-links .play-link:focus-visible {
+  .nav-links .play-link:hover {
     background: #7a1b1d;
-    color: #ffffff;
+    color: #fff;
     transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(102, 18, 20, 0.45);
+    box-shadow: 0 10px 24px rgba(102,18,20,0.45);
   }
 
+  /* ── Desktop auth actions ── */
   .nav-actions {
+    display: none;
+    gap: 10px;
+  }
+
+  @media (min-width: 900px) {
+    .nav-actions { display: flex; }
+  }
+
+  /* ── Burger button ── */
+  .nav-burger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: 1px solid rgba(220,214,196,0.15);
+    cursor: pointer;
+    padding: 8px 10px;
+    z-index: 600;
+    transition: border-color 0.3s;
+  }
+
+  .nav-burger:hover { border-color: rgba(220,214,196,0.35); }
+
+  @media (min-width: 900px) {
+    .nav-burger { display: none; }
+  }
+
+  .burger-line {
+    width: 22px;
+    height: 2px;
+    background: var(--beige);
+    display: block;
+    transition: transform 0.3s, opacity 0.3s;
+    transform-origin: center;
+  }
+
+  .nav-burger.is-active .burger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-burger.is-active .burger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .nav-burger.is-active .burger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ── Mobile overlay ── */
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 490;
+    background: rgba(7,7,7,0.98);
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+
+  .nav-overlay.is-open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  @media (min-width: 900px) {
+    .nav-overlay { display: none; }
+  }
+
+  .nav-overlay-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .nav-overlay-links a {
+    font-family: var(--font-display);
+    font-size: 18px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--beige-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-overlay-links a:hover { color: var(--beige); }
+
+  .nav-overlay-actions {
     display: flex;
     gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
-  @media (max-width: 768px) {
-    nav {
-      padding: 14px 20px;
-    }
-
-    .nav-links {
-      display: none;
-    }
+  .nav-overlay-play {
+    margin-top: -16px;
   }
 </style>

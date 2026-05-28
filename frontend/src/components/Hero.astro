@@ -6,9 +6,9 @@ import logoSrc from '../assets/images/Logo.png';
 <section class="hero" id="inicio">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
-  <div class="particles">
-    {Array.from({ length: 30 }).map((_, i) => (
-      <span class="particle" style={`animation-delay: ${i * 0.8}s; left: ${Math.random() * 100}%;`}></span>
+  <div class="particles" aria-hidden="true">
+    {Array.from({ length: 20 }).map((_, i) => (
+      <span class="particle" style={`animation-delay: ${i * 1.2}s; left: ${(i * 5.1) % 100}%;`}></span>
     ))}
   </div>
   <div class="hero-content">
@@ -19,38 +19,40 @@ import logoSrc from '../assets/images/Logo.png';
       <a href="#personajes" class="btn-play">▶ JUGAR AHORA</a>
       <button class="btn btn-outline" data-auth="register">CREAR CUENTA</button>
     </div>
-    <div style="display:flex;gap:16px;margin-top:8px;">
+    <div class="hero-badges">
       <span class="badge badge-green"><span class="badge-dot"></span> Servidores Online</span>
-      <span class="badge" style="background:rgba(24,51,72,0.3);border:1px solid rgba(24,51,72,0.6);color:#4a9eca;">🎮 2,847 Jugadores activos</span>
+      <span class="badge badge-blue">🎮 2,847 Jugadores activos</span>
     </div>
-  </div>
   </div>
 </section>
 
 <style>
   .hero {
     position: relative;
-    height: 100vh;
+    min-height: 100svh;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    padding: 80px 24px 40px;
   }
 
   .hero-bg {
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(102,18,20,0.35) 0%, transparent 60%),
-                radial-gradient(ellipse 80% 60% at 20% 50%, rgba(46,16,101,0.5) 0%, transparent 50%),
-                radial-gradient(ellipse 60% 40% at 80% 30%, rgba(24,51,72,0.4) 0%, transparent 50%),
-                var(--black);
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 100%, rgba(102,18,20,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 60% at 20% 50%, rgba(46,16,101,0.5) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 40% at 80% 30%, rgba(24,51,72,0.4) 0%, transparent 50%),
+      var(--black);
   }
 
   .hero-grid {
     position: absolute;
     inset: 0;
-    background-image: linear-gradient(rgba(220,214,196,0.02) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(220,214,196,0.02) 1px, transparent 1px);
+    background-image:
+      linear-gradient(rgba(220,214,196,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(220,214,196,0.02) 1px, transparent 1px);
     background-size: 60px 60px;
     mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 80%);
   }
@@ -62,20 +64,29 @@ import logoSrc from '../assets/images/Logo.png';
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 32px;
+    gap: 20px;
+    width: 100%;
+    max-width: 680px;
+  }
+
+  @media (min-width: 768px) {
+    .hero-content { gap: 28px; }
   }
 
   .hero-logo {
-    width: 520px;
-    max-width: 90vw;
+    width: min(280px, 72vw);
     filter: drop-shadow(0 0 40px rgba(220,214,196,0.3)) drop-shadow(0 0 80px rgba(102,18,20,0.5));
     animation: heroPulse 4s ease-in-out infinite;
   }
 
+  @media (min-width: 480px) { .hero-logo { width: 340px; } }
+  @media (min-width: 768px) { .hero-logo { width: 440px; } }
+  @media (min-width: 1024px) { .hero-logo { width: 520px; } }
+
   .hero-tagline {
     font-family: var(--font-display);
-    font-size: 13px;
-    letter-spacing: 8px;
+    font-size: clamp(9px, 2.5vw, 13px);
+    letter-spacing: clamp(4px, 2vw, 8px);
     text-transform: uppercase;
     color: var(--beige-dim);
     opacity: 0;
@@ -83,48 +94,46 @@ import logoSrc from '../assets/images/Logo.png';
   }
 
   .hero-desc {
-    font-size: 18px;
+    font-size: clamp(14px, 3.5vw, 18px);
     font-weight: 300;
     color: var(--beige-dim);
-    max-width: 540px;
+    max-width: 520px;
     line-height: 1.8;
     opacity: 0;
     animation: fadeUp 1s ease 1.2s forwards;
+    padding: 0 8px;
   }
 
   .hero-ctas {
     display: flex;
-    gap: 16px;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
     opacity: 0;
     animation: fadeUp 1s ease 1.6s forwards;
   }
 
-  .hero-scroll {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
+  .hero-badges {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
     opacity: 0;
     animation: fadeUp 1s ease 2s forwards;
   }
 
-  .hero-scroll span {
-    font-size: 10px;
-    letter-spacing: 4px;
+  .badge-blue {
+    background: rgba(24,51,72,0.3);
+    border: 1px solid rgba(24,51,72,0.6);
+    color: #4a9eca;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    font-size: 11px;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--beige-dim);
     font-family: var(--font-display);
-  }
-
-  .scroll-line {
-    width: 1px;
-    height: 60px;
-    background: linear-gradient(180deg, var(--beige-dim), transparent);
-    animation: scrollPulse 2s ease-in-out infinite;
   }
 
   .particles {
@@ -142,14 +151,5 @@ import logoSrc from '../assets/images/Logo.png';
     border-radius: 50%;
     animation: float 15s linear infinite;
     opacity: 0;
-  }
-
-  @media (max-width: 768px) {
-    .hero-ctas {
-      flex-direction: column;
-    }
-    .hero-logo {
-      width: 320px;
-    }
   }
 </style>

@@ -14,11 +14,8 @@ import AuthLauncher from '../components/AuthLauncher.jsx';
 
 <Layout title="Recessed Minds">
   <Nav>
-    <button slot="actions" class="btn btn-red" data-auth="register">Registrarse</button>
-    <button slot="actions" class="btn btn-outline" data-auth="login">Iniciar sesion</button>
+    <AuthLauncher client:only="preact" slot="actions" showTrigger={true} />
   </Nav>
-
-  <AuthLauncher client:load showTrigger={false} />
 
   <main id="main">
     <Hero />
